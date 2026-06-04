@@ -24,23 +24,12 @@
         .match-num-col { width: 40px; }
         .match-num { position: absolute; top: 2px; left: 3px; font-size: 8px; color: #888; line-height: 1; }
 
-        /* 画面表示時は常に1列 */
-        .match-list-container { display: flex; flex-direction: column; gap: 10px; }
-        .match-list-column { width: 100%; }
-
         @media print {
             @page { size: A4 portrait; margin: 15mm; }
             .no-print { display: none; }
             .page { margin-bottom: 0; }
-
-            /* 印刷時のみ段組を有効化 */
-            .match-list-container {
-                flex-direction: row;
-                flex-wrap: wrap;
-                gap: 10px;
-            }
+            .match-list-container { display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px; }
             .match-list-column { flex: 1; min-width: 200px; }
-
             th, td { height: 28px; font-size: 10px; }
             .match-num-col { width: 30px; }
         }
@@ -95,14 +84,14 @@
         matches.sort((a, b) => a.originalNum - b.originalNum);
         matches.forEach((m, idx) => m.num = idx + 1);
 
-        // 列数の決定 (印刷時のみ適用されるロジックへ)
-        const numCols = (n >= 8) ? 3 : (n >= 6) ? 2 : 1;
+        // 人数ごとの段組み設定
+        const numCols = (n === 10) ? 3 : (n >= 6) ? 2 : 1;
         const matchesPerCol = Math.ceil(matches.length / numCols);
 
         const headerHtml = `<h1>${eventName}</h1><div class="date-display">${eventDate}</div>`;
 
         let html = `<div class="page">${headerHtml}<h2>1. 対戦表</h2><table><tr><th></th>`;
-        names.forEach(n => html += `<th>${n}</th>`);
+        names.forEach(name => html += `<th>${name}</th>`);
         html += "</tr>";
         for (let i = 0; i < n; i++) {
             html += `<tr><th>${names[i]}</th>`;
