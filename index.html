@@ -21,17 +21,18 @@
         h2 { font-size: 1.1em; margin: 10px 0; border-left: 4px solid #007bff; padding-left: 6px; }
         .date-display { text-align: right; font-size: 0.85em; color: #555; }
 
-        table { border-collapse: collapse; table-layout: fixed; width: 100%; margin-top: 5px; }
-        th, td { border: 1px solid #aaa; height: 35px; text-align: center; font-size: 11px; padding: 4px; position: relative; }
+        /* 表の基本設定：幅を制限し、高さを固定 */
+        table { border-collapse: collapse; table-layout: fixed; width: 100%; max-width: 500px; margin-top: 5px; }
+        th, td { border: 1px solid #aaa; height: 35px; text-align: center; font-size: 11px; padding: 4px; position: relative; overflow: hidden; }
         th { background: #eee; }
 
-        /* 試合番号列を固定 */
-        table th:nth-child(1), table td:nth-child(1) { width: 30px; }
+        /* 試合番号列の幅を絶対固定 */
+        .match-list-container table th:nth-child(1),
+        .match-list-container table td:nth-child(1) { width: 30px !important; }
 
         .match-num { position: absolute; top: 2px; left: 3px; font-size: 9px; color: #666; }
         .diagonal { background: linear-gradient(to top right, #ddd 49.5%, #aaa 49.5%, #aaa 50.5%, #ddd 50.5%); }
 
-        /* 画面表示は1段 */
         .match-list-container { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
 
         @media print {
@@ -39,12 +40,12 @@
             .page { page-break-after: always; }
             .page:last-child { page-break-after: avoid; }
 
-            /* 印刷時のみ横並び（2段または3段）に */
+            /* 印刷時のみ3段/2段レイアウト */
             .match-list-container { flex-direction: row; flex-wrap: wrap; }
             .match-list-container > div { flex: 1; min-width: 30%; }
 
-            /* 印刷時は文字サイズを詰める */
-            th, td { height: 22px; font-size: 9px; padding: 1px; }
+            /* 印刷時は少し小さく */
+            th, td { height: 25px; font-size: 9px; padding: 1px; }
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
     </style>
@@ -95,8 +96,7 @@ function generate() {
     let html = `<div class="page">`;
     if (eventName) html += `<h1>${eventName}</h1>`;
     html += `<div class="date-display">${eventDate}</div><h2>1. 対戦表</h2>`;
-    const tableStyle = n <= 5 ? 'style="max-width: 450px;"' : '';
-    html += `<table ${tableStyle}><tr><th></th>${names.map(name => `<th>${name}</th>`).join('')}</tr>`;
+    html += `<table><tr><th></th>${names.map(name => `<th>${name}</th>`).join('')}</tr>`;
     for (let i = 0; i < n; i++) {
         html += `<tr><th>${names[i]}</th>`;
         for (let j = 0; j < n; j++) {
