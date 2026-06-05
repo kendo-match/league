@@ -20,12 +20,10 @@
         button:disabled { background-color: #ccc; }
 
         .page { margin-bottom: 30px; }
-        /* アンダーラインを削除 */
         .header-container { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 5px; }
         h1 { font-size: 1.2em; margin: 0; }
         .date-display { font-size: 0.8em; color: #666; }
         
-        /* タイトルと表の間のスペースを拡大 */
         h2.section-title { font-size: 1em; margin: 30px 0 10px 0 !important; }
         
         table { border-collapse: collapse; width: 100%; table-layout: fixed; }
@@ -42,7 +40,9 @@
             .no-print { display: none; }
             .page { page-break-after: always; margin-bottom: 0; }
             .page:last-child { page-break-after: avoid; }
-            .print-col-1 { min-width: 100%; }
+            
+            /* 印刷時：3〜5人の対戦順表は幅を半分にする */
+            .print-col-1 { min-width: 50% !important; max-width: 50% !important; }
             .print-col-2 { min-width: 48%; }
             .print-col-3 { min-width: 31%; }
             .print-col-3 .match-num-col { width: 22px; }
