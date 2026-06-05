@@ -25,28 +25,20 @@
         .match-num-col { width: 40px; }
         .match-num { position: absolute; top: 2px; left: 3px; font-size: 8px; color: #888; line-height: 1; }
 
+        /* 画面用スタイル */
         .match-list-container { display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px; }
-        .match-list-column { flex: 1; min-width: 45%; }
+        .match-list-column { flex: 1; min-width: 100%; } /* 画面は常に1段 */
 
         @media print {
             @page { size: A4 portrait; margin: 10mm; }
             .no-print { display: none; }
+            .page { page-break-after: always; margin-bottom: 0; }
+            .page:last-child { page-break-after: avoid; }
             
-            /* ページ区切りの設定 */
-            .page { 
-                page-break-after: always; 
-                margin-bottom: 0;
-            }
-            .page:last-child {
-                page-break-after: avoid;
-            }
-            
-            /* 対戦順ページ(2ページ目)が溢れる場合の自動縮小 */
-            .page:nth-of-type(2) {
-                transform: scale(0.92);
-                transform-origin: top left;
-                width: 108%;
-            }
+            /* 印刷時の段数制御 */
+            .print-col-1 { min-width: 100%; }
+            .print-col-2 { min-width: 48%; }
+            .print-col-3 { min-width: 31%; }
             
             .large-group { font-size: 9px; }
             .large-group th, .large-group td { height: 28px; }
@@ -57,14 +49,8 @@
 
 <div class="no-print">
     <h2>試合作成ツール</h2>
-    <div class="form-group">
-        <label>試合名</label>
-        <input type="text" id="eventName" placeholder="例: 6月度月例試合">
-    </div>
-    <div class="form-group">
-        <label>参加者名（3〜10人、改行区切り）</label>
-        <textarea id="names" placeholder="Aさん&#10;Bさん&#10;Cさん"></textarea>
-    </div>
+    <div class="form-group"><label>試合名</label><input type="text" id="eventName" placeholder="例: 6月度月例試合"></div>
+    <div class="form-group"><label>参加者名（3〜10人、改行区切り）</label><textarea id="names" placeholder="Aさん&#10;Bさん&#10;Cさん"></textarea></div>
     <button onclick="generate()">表を作成して表示</button>
     <button id="printBtn" onclick="window.print()" disabled style="background-color: #6c757d;">印刷する</button>
 </div>
@@ -73,8 +59,7 @@
 
 <script>
     const LEAGUE_TABLES = {
-        3: [[0, 1, 3], [1, 0, 2], [3, 2, 0]],
-        4: [[0, 1, 5, 3], [1, 0, 4, 6], [5, 4, 0, 2], [3, 6, 2, 0]],
+        3: [[0, 1, 3], [1, 0, 2], [3, 2, 0]], 4: [[0, 1, 5, 3], [1, 0, 4, 6], [5, 4, 0, 2], [3, 6, 2, 0]],
         5: [[0, 1, 6, 9, 3], [1, 0, 4, 7, 10], [6, 4, 0, 2, 8], [9, 7, 2, 0, 5], [3, 10, 8, 5, 0]],
         6: [[0, 1, 12, 8, 10, 6], [1, 0, 4, 13, 7, 11], [12, 4, 0, 2, 14, 9], [8, 13, 2, 0, 5, 15], [10, 7, 14, 5, 0, 3], [6, 11, 9, 15, 3, 0]],
         7: [[0, 1, 14, 8, 20, 12, 4], [1, 0, 5, 15, 9, 19, 13], [14, 5, 0, 2, 16, 10, 21], [8, 15, 2, 0, 6, 17, 11], [20, 9, 16, 6, 0, 3, 18], [12, 19, 10, 17, 3, 0, 7], [4, 13, 21, 11, 18, 7, 0]],
@@ -89,44 +74,40 @@
         const n = names.length;
         if (n < 3 || n > 10) { alert("3〜10人で入力してください"); return; }
 
-        const now = new Date();
-        const eventDate = `${now.getFullYear()}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')}`;
-        
         const matrix = LEAGUE_TABLES[n];
         let matches = [];
         for (let i = 0; i < n; i++) {
-            for (let j = i + 1; j < n; j++) {
-                matches.push({ p1: names[i], p2: names[j], originalNum: matrix[i][j] });
-            }
+            for (let j = i + 1; j < n; j++) { matches.push({ p1: names[i], p2: names[j], originalNum: matrix[i][j] }); }
         }
         matches.sort((a, b) => a.originalNum - b.originalNum);
         matches.forEach((m, idx) => m.num = idx + 1);
 
-        const numCols = (n >= 6) ? 2 : 1; 
-        const matchesPerCol = Math.ceil(matches.length / numCols);
-        const tableClass = (n >= 9) ? "large-group" : "";
+        // 印刷時の段数決定
+        let printCols = 1;
+        if (n >= 6 && n <= 9) printCols = 2;
+        else if (n === 10) printCols = 3;
 
-        const headerHtml = `<h1>${eventName}</h1><div class="date-display">${eventDate}</div>`;
-
-        let html = `<div class="page ${tableClass}">${headerHtml}<h2>1. 対戦表</h2><table><tr><th></th>`;
+        const headerHtml = `<h1>${eventName}</h1>`;
+        let html = `<div class="page">` + headerHtml + `<h2>1. 対戦表</h2><table><tr><th></th>`;
         names.forEach(name => html += `<th>${name}</th>`);
         html += "</tr>";
         for (let i = 0; i < n; i++) {
             html += `<tr><th>${names[i]}</th>`;
             for (let j = 0; j < n; j++) {
-                let cellVal = "";
-                if(i !== j) {
-                    const match = matches.find(m => (m.p1 === names[i] && m.p2 === names[j]) || (m.p1 === names[j] && m.p2 === names[i]));
-                    cellVal = match ? match.num : "";
-                }
-                html += (i === j) ? `<td style="background:#eee;"></td>` : `<td><span class="match-num">${cellVal}</span></td>`;
+                const match = matches.find(m => (m.p1 === names[i] && m.p2 === names[j]) || (m.p1 === names[j] && m.p2 === names[i]));
+                html += (i === j) ? `<td style="background:#eee;"></td>` : `<td><span class="match-num">${match ? match.num : ""}</span></td>`;
             }
             html += "</tr>";
         }
         
-        html += `</table></div><div class='page'>${headerHtml}<h2>2. 対戦順</h2><div class="match-list-container">`;
-        for (let c = 0; c < numCols; c++) {
-            html += `<div class="match-list-column"><table><tr><th class="match-num-col">試合</th><th>赤</th><th>白</th></tr>`;
+        html += `</table></div><div class='page'>` + headerHtml + `<h2>2. 対戦順</h2><div class="match-list-container">`;
+        
+        // 印刷時はこのクラスを適用して段組みを制御
+        const printColClass = `print-col-${printCols}`;
+        const matchesPerCol = Math.ceil(matches.length / printCols);
+        
+        for (let c = 0; c < printCols; c++) {
+            html += `<div class="match-list-column ${printColClass}"><table><tr><th class="match-num-col">試合</th><th>赤</th><th>白</th></tr>`;
             const colMatches = matches.slice(c * matchesPerCol, (c + 1) * matchesPerCol);
             colMatches.forEach(m => html += `<tr><td>${m.num}</td><td>${m.p1}</td><td>${m.p2}</td></tr>`);
             html += `</table></div>`;
