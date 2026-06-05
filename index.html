@@ -48,7 +48,7 @@
 <body>
 
 <div class="no-print">
-    <h2>試合作成ツール</h2>
+    <h3>試合作成ツール</h3>
     <div class="form-group"><label>試合名</label><input type="text" id="eventName" placeholder="例: 4月度月例試合"></div>
     <div class="form-group"><label>参加者名（3〜10人、改行区切り）</label><textarea id="names" placeholder="Aさん&#10;Bさん&#10;Cさん"></textarea></div>
     <button onclick="generate()">表を作成して表示</button>
@@ -70,7 +70,7 @@
 
     function generate() {
         const names = document.getElementById('names').value.split('\n').map(n => n.trim()).filter(n => n !== "");
-        const eventName = document.getElementById('eventName').value || "大会";
+        const eventName = document.getElementById('eventName').value || "";
         const n = names.length;
         if (n < 3 || n > 10) { alert("3〜10人で入力してください"); return; }
 
@@ -88,7 +88,7 @@
         else if (n === 10) printCols = 3;
 
         const headerHtml = `<h1>${eventName}</h1>`;
-        let html = `<div class="page">` + headerHtml + `<h2>対戦表</h2><table><tr><th></th>`;
+        let html = `<div class="page">` + headerHtml + `<h3>対戦表</h3><table><tr><th></th>`;
         names.forEach(name => html += `<th>${name}</th>`);
         html += "</tr>";
         for (let i = 0; i < n; i++) {
@@ -100,7 +100,7 @@
             html += "</tr>";
         }
         
-        html += `</table></div><div class='page'>` + headerHtml + `<h2>対戦順</h2><div class="match-list-container">`;
+        html += `</table></div><div class='page'>` + headerHtml + `<h3>対戦順</h3><div class="match-list-container">`;
         
         // 印刷時はこのクラスを適用して段組みを制御
         const printColClass = `print-col-${printCols}`;
