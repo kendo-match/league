@@ -39,6 +39,9 @@
             .print-col-2 { min-width: 48%; }
             .print-col-3 { min-width: 31%; }
             
+            /* 3段組みの時だけ試合番号列を狭くして名前欄を広げる */
+            .print-col-3 .match-num-col { width: 25px; }
+            
             .large-group { font-size: 9px; }
         }
     </style>
@@ -80,7 +83,6 @@
         matches.sort((a, b) => a.originalNum - b.originalNum);
         matches.forEach((m, idx) => m.num = idx + 1);
 
-        // 印刷時の段数決定（9人以上を3段に変更）
         let printCols = 1;
         if (n >= 6 && n <= 8) printCols = 2;
         else if (n >= 9) printCols = 3;
