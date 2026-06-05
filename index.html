@@ -23,7 +23,8 @@
         h1 { font-size: 1.2em; margin: 0; }
         .date-display { font-size: 0.8em; color: #666; }
         
-        h2.section-title { font-size: 1em; margin: 30px 0 10px 0 !important; }
+        /* タイトル下の余白を30pxに拡大 */
+        h2.section-title { font-size: 1em; margin: 30px 0 30px 0 !important; }
         
         table { border-collapse: collapse; width: 100%; table-layout: fixed; }
         th, td { border: 1px solid #aaa; height: 30px; text-align: center; font-size: 11px; padding: 1px; position: relative; }
@@ -31,7 +32,6 @@
         .match-num-col { width: 35px; }
         .match-num { position: absolute; top: 1px; left: 2px; font-size: 7px; color: #888; line-height: 1; }
 
-        /* 列の間隔を広げる設定 */
         .match-list-container { display: flex; flex-direction: row; flex-wrap: wrap; gap: 20px; }
         .match-list-column { flex: 1; min-width: 100%; }
 
@@ -41,7 +41,6 @@
             .page { page-break-after: always; margin-bottom: 0; }
             .page:last-child { page-break-after: avoid; }
             
-            /* 印刷時：幅を微調整して余白を確保 */
             .print-col-1 { min-width: 50% !important; max-width: 50% !important; }
             .print-col-2 { min-width: 45% !important; }
             .print-col-3 { min-width: 30% !important; }
@@ -94,7 +93,7 @@
         else if (n >= 9) printCols = 3;
 
         const headerHtml = `<div class="header-container"><h1>${eventName}</h1><div class="date-display">${dateStr}</div></div>`;
-        let html = `<div class="page">` + headerHtml + `<h2 class="section-title">対戦表</h2><table><tr><tr><tr><th></th>`;
+        let html = `<div class="page">` + headerHtml + `<h2 class="section-title">対戦表</h2><table><tr><th></th>`;
         names.forEach(name => html += `<th>${name}</th>`);
         html += "</tr>";
         for (let i = 0; i < n; i++) {
