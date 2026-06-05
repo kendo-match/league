@@ -7,14 +7,13 @@
     <style>
         body { font-family: sans-serif; padding: 8px; margin: 0; background-color: #fff; color: #333; }
         
-        /* ツールエリア */
         .no-print { margin-bottom: 8px; background: #f9f9f9; padding: 10px; border-radius: 8px; }
         h2 { margin-top: 0 !important; margin-bottom: 8px !important; font-size: 1.1em; }
         
         .form-group { margin-bottom: 8px; }
         .form-group label { display: block; font-weight: bold; margin-bottom: 2px; font-size: 0.9em; }
-        .form-group input { width: 100%; padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        .form-group textarea { width: 100%; padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; height: 200px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 8px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .form-group textarea { height: 200px; }
         
         button { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; background-color: #007bff; color: white; font-weight: bold; font-size: 14px; }
         button:disabled { background-color: #ccc; }
@@ -32,7 +31,8 @@
         .match-num-col { width: 35px; }
         .match-num { position: absolute; top: 1px; left: 2px; font-size: 7px; color: #888; line-height: 1; }
 
-        .match-list-container { display: flex; flex-direction: row; flex-wrap: wrap; gap: 5px; }
+        /* 列の間隔を広げる設定 */
+        .match-list-container { display: flex; flex-direction: row; flex-wrap: wrap; gap: 20px; }
         .match-list-column { flex: 1; min-width: 100%; }
 
         @media print {
@@ -41,10 +41,10 @@
             .page { page-break-after: always; margin-bottom: 0; }
             .page:last-child { page-break-after: avoid; }
             
-            /* 印刷時：3〜5人の対戦順表は幅を半分にする */
+            /* 印刷時：幅を微調整して余白を確保 */
             .print-col-1 { min-width: 50% !important; max-width: 50% !important; }
-            .print-col-2 { min-width: 48%; }
-            .print-col-3 { min-width: 31%; }
+            .print-col-2 { min-width: 45% !important; }
+            .print-col-3 { min-width: 30% !important; }
             .print-col-3 .match-num-col { width: 22px; }
         }
     </style>
