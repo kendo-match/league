@@ -46,30 +46,33 @@
             .page { page-break-after: always; margin-bottom: 0; }
             .page:last-child { page-break-after: avoid; }
             
-            /* 【修正点】印刷時の数字を大きくしつつ、太さは普通(normal)にする */
+            /* 対戦表のサイズを人数に応じて動的に制限 */
+            .page:first-of-type table { 
+                width: auto;
+                margin: 0 auto;
+            }
+            /* 人数が少ないほど小さく（3人で約40%幅、10人で100%幅に近づく） */
+            .page[data-n="3"] table { width: 40% !important; }
+            .page[data-n="4"] table { width: 50% !important; }
+            .page[data-n="5"] table { width: 60% !important; }
+            .page[data-n="6"] table { width: 70% !important; }
+            .page[data-n="7"] table { width: 80% !important; }
+            .page[data-n="8"] table { width: 90% !important; }
+            .page[data-n="9"] table { width: 95% !important; }
+            .page[data-n="10"] table { width: 100% !important; }
+
+            .page:first-of-type table th, 
+            .page:first-of-type table td {
+                height: 60px; /* 全体的に少しコンパクトに */
+            }
+
+            /* 印刷時の対戦番号 */
             .match-num { 
                 font-size: 14px !important; 
                 font-weight: normal !important; 
                 color: #000 !important;
                 top: 5px; 
                 left: 5px;
-            }
-
-            .page[data-n="9"] table th, .page[data-n="9"] table td,
-            .page[data-n="10"] table th, .page[data-n="10"] table td {
-                height: 60px !important;
-                width: 60px !important;
-            }
-
-            .page:first-of-type table { 
-                width: auto;
-                margin: 0 auto;
-                max-width: 100%;
-            }
-            .page:first-of-type table th, 
-            .page:first-of-type table td {
-                height: 80px;
-                width: 80px;
             }
             
             .diagonal-line { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
