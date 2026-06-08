@@ -25,7 +25,6 @@
         
         h2.section-title { font-size: 1em; margin: 30px 0 30px 0 !important; }
         
-        /* 画面用テーブル */
         table { border-collapse: collapse; width: 100%; table-layout: fixed; }
         th, td { border: 1px solid #aaa; height: 30px; text-align: center; font-size: 11px; padding: 1px; position: relative; }
         th { background: #eee; }
@@ -47,16 +46,22 @@
             .page { page-break-after: always; margin-bottom: 0; }
             .page:last-child { page-break-after: avoid; }
             
-            /* 【修正点】枠線を均一・黒色で印刷する設定 */
+            /* 枠線の均一化 */
             table { border-collapse: separate !important; border-spacing: 0 !important; border-left: 1px solid #000; border-top: 1px solid #000; }
             th, td { border: 0 !important; border-right: 1px solid #000 !important; border-bottom: 1px solid #000 !important; }
             th { background: #eee !important; -webkit-print-color-adjust: exact; }
 
-            /* 対戦番号のサイズ調整 */
+            /* 【修正点】斜線の復活 */
+            .diagonal-line { 
+                background: #eee !important;
+                background-image: linear-gradient(to top right, transparent 49%, #000 50%, #000 51%, transparent 52%) !important;
+                -webkit-print-color-adjust: exact;
+            }
+
             .match-num { 
                 font-size: 11px !important; 
                 font-weight: normal !important; 
-                color: #444444 !important;
+                color: #000 !important;
                 top: 4px; 
                 left: 4px;
             }
@@ -73,8 +78,6 @@
 
             .page:first-of-type table th, 
             .page:first-of-type table td { height: 60px; }
-            
-            .diagonal-line { background: #eee !important; -webkit-print-color-adjust: exact; }
             
             .print-col-1 { min-width: 50% !important; max-width: 50% !important; }
             .print-col-2 { min-width: 45% !important; }
