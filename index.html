@@ -47,14 +47,14 @@
             .page:last-child { page-break-after: avoid; }
             
             /* 枠線の均一化 */
-            table { border-collapse: separate !important; border-spacing: 0 !important; border-left: 1px solid #000; border-top: 1px solid #000; }
-            th, td { border: 0 !important; border-right: 1px solid #000 !important; border-bottom: 1px solid #000 !important; }
+            table { border-collapse: separate !important; border-spacing: 0 !important; border-left: 1px solid #333; border-top: 1px solid #333; }
+            th, td { border: 0 !important; border-right: 1px solid #333 !important; border-bottom: 1px solid #333 !important; }
             th { background: #eee !important; -webkit-print-color-adjust: exact; }
 
             /* 【修正点】斜線の復活 */
             .diagonal-line { 
                 background: #D5D5D5 !important;
-                background-image: linear-gradient(to top right, transparent 49%, #aaa 50%, #aaa 51%, transparent 52%) !important;
+                background-image: linear-gradient(to top right, transparent 49%, #777 50%, #aaa 51%, transparent 52%) !important;
                 -webkit-print-color-adjust: exact;
             }
 
